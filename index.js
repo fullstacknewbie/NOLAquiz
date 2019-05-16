@@ -29,69 +29,51 @@ function currentAnswers() {
 
 function checkAnswer() {
     $("li").on('click', (event) => {
-        console.log('clicked')
+        event.preventDefault();
         let selectedAnswer = $(event.currentTarget).text()
-        console.log(selectedAnswer)
-        console.log(correctAnswer)
+        $("#answer").removeClass("hide");
         if (selectedAnswer == correctAnswer) {
-            $("#answer").html("<h1>CORRECT!</h1>")
+            $("#answer").html("<span>CORRECT!</span>")
             numCorrect=numCorrect+1
         }
         else {
-            $("#answer").html("<h1>Sorry, the correct answer is "+correctAnswer+".</h1>")
+            $("#answer").html("<span>Sorry, the correct answer is "+correctAnswer+".</span>")
         }
-        $("#score").html("<span>You've answered "+numCorrect+" out of "+(questionNum+1)+" questions correctly!</span>")
-        $("#next").removeClass("hide")
-        console.log("checkAnswer ran")
-    }
-    )
+        questionNum=questionNum+1
+        if (questionNum <= 4) {
+            $("#score").html("<span>You've answered "+numCorrect+" out of "+(questionNum)+" questions correctly!</span>")
+            $("#next").removeClass("hide")
+            $("li").addClass("disabled");
+        }
+        else {
+            $("#score").html("<span>Quiz Complete!  You answered "+numCorrect+" out of 5 questions correctly!</span>")
+            $("#newQuiz").removeClass("hide")
+        }
+    })
 }
 
 function quizStart() {
     $("#startQuiz").on('click', (event) => {
         $("main").removeClass("hide")
         $("header").addClass("hide")
-        console.log(questionText)
-        console.log(answerText1)
-        console.log(answerText2)
-        console.log(answerText3)
-        console.log(answerText4)
-        console.log(correctAnswer)
     }
     )
 }
 
 function nextQuestion() {
     $("#next").on('click', (event) => {
-        console.log(questionNum)
-        if (questionNum < 4) {
-            questionNum = questionNum+1
-            console.log(questionNum)
-            questionText = questions[questionNum].question;
-            answerText1 = questions[questionNum].answers[0];
-            answerText2 = questions[questionNum].answers[1];
-            answerText3 = questions[questionNum].answers[2];
-            answerText4 = questions[questionNum].answers[3];
-            correctAnswer = questions[questionNum].correct;
-            console.log(questionText)
-            console.log(answerText1)
-            console.log(answerText2)
-            console.log(answerText3)
-            console.log(answerText4)
-            console.log(correctAnswer)
-            $("#next").addClass("hide")
-            $(currentQuestion)
-            $(currentAnswers)
-        }
-        else {
-            $("#next").addClass("hide")
-            $("#score").addClass("hide")
-            $("#quizResults").removeClass("hide")
-            $("#quizResults").html("<span>Quiz Complete!  You answered "+numCorrect+" out of 5 questions correctly!</span>")
-            $("#newQuiz").removeClass("hide")
-        }
-    })
-
+        $("#answer").addClass("hide")
+        $("li").removeClass("disabled");
+        questionText = questions[questionNum].question;
+        answerText1 = questions[questionNum].answers[0];
+        answerText2 = questions[questionNum].answers[1];
+        answerText3 = questions[questionNum].answers[2];
+        answerText4 = questions[questionNum].answers[3];
+        correctAnswer = questions[questionNum].correct;
+        $("#next").addClass("hide")
+        $(currentQuestion)
+        $(currentAnswers)
+        })
 }
 
 function restartQuiz() {
